@@ -1,7 +1,9 @@
 package pl.wawra.notes.presentation.notes
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,11 +68,6 @@ class NotesFragment : BaseFragment(), NotesActions {
         makeSnackBar(note)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) { // TODO: remove
-        inflater.inflate(R.menu.options_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     private fun setupRecycler() {
         notesAdapter = NotesAdapter(this as NotesActions)
         fragment_notes_recycler.apply {
@@ -81,17 +78,14 @@ class NotesFragment : BaseFragment(), NotesActions {
 
     override fun onResume() {
         super.onResume()
-        toolbarTitle = getString(R.string.your_notes)
-        navigationBack = false
+        setUpTopBar(
+            getString(R.string.your_notes),
+            { /* TODO: Google login / logout*/ },
+            { navigate?.navigate(NotesFragmentDirections.toNewNote()) },
+            R.drawable.ic_google_light,
+            R.drawable.ic_add
+        )
         viewModel.getNotes()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) { // TODO: remove
-        R.id.menu_add_note -> {
-            navigate?.navigate(NotesFragmentDirections.toNewNote())
-            true
-        }
-        else -> false
     }
 
 }

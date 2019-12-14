@@ -1,9 +1,11 @@
 package pl.wawra.notes.base
 
-import androidx.appcompat.app.ActionBar
-
 interface ToolbarInteraction {
 
-    val topActionBar: ActionBar?
+    fun setTopBarTitle(title: String)
+    fun setLeftButtonAction(action: () -> Any)
+    fun setRightButtonAction(action: () -> Any)
+    fun setLeftButtonIcon(res: Int)
+    fun setRightButtonIcon(res: Int)
 
 }
