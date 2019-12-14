@@ -15,8 +15,8 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE id = :id LIMIT 1")
     fun getNoteById(id: Long): Note?
 
-    @Query("DELETE FROM note WHERE id IN (:ids)")
-    fun deleteByIds(ids: List<Long>)
+    @Query("DELETE FROM note WHERE id = :id")
+    fun deleteById(id: Long)
 
     @Query("DELETE FROM note")
     fun deleteAll()

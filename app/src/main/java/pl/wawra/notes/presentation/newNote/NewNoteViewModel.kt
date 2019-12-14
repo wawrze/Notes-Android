@@ -12,7 +12,8 @@ class NewNoteViewModel : ViewModel() {
 
     fun addNote(noteBody: String) {
         onBg {
-            noteDao.insert(Note(body = noteBody))
+            noteDao.insert(Note(title = noteBody))
+            // TODO: if note is to sync with Google - send it to calendar
         }
     }
 

@@ -1,7 +1,5 @@
 package pl.wawra.notes.presentation.notes
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Observer
@@ -41,32 +39,15 @@ class NotesFragment : BaseFragment(), NotesActions {
                 notesAdapter.data = it
             }
         )
-        fragment_notes_return_button.setOnClickListener {
-            notesAdapter.setDeleteMode(false)
-            fragment_notes_remove_button.visibility = View.GONE
-            fragment_notes_return_button.visibility = View.GONE
-            notesAdapter.toRemove.clear()
-        }
-        fragment_notes_remove_button.setOnClickListener {
-            val notesToRemove = notesAdapter.toRemove.toList()
-            viewModel.deleteNotes(notesToRemove)
-            notesAdapter.setDeleteMode(false)
-            fragment_notes_remove_button.visibility = View.GONE
-            fragment_notes_return_button.visibility = View.GONE
-            makeSnackbar(notesToRemove)
-            notesAdapter.toRemove.clear()
-        }
     }
 
-    private fun makeSnackbar(notesToRestore: List<Note>) {
+    private fun makeSnackBar(noteToRestore: Note) {
         view?.let {
             Snackbar.make(
                 it,
-                getString(R.string.notes_deleted, notesToRestore.size),
+                getString(R.string.note_deleted),
                 Snackbar.LENGTH_LONG
-            )
-                .setAction(R.string.undo) { viewModel.restoreNotes(notesToRestore) }
-                .show()
+            ).setAction(R.string.undo) { viewModel.restoreNotes(noteToRestore) }.show()
         }
     }
 
@@ -75,16 +56,17 @@ class NotesFragment : BaseFragment(), NotesActions {
     }
 
     override fun onNoteBodyClicked(note: Note) {
-        if (note.body.startsWith("http", true)) {
-            startActivity(
-                Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(note.body)
-                }
-            )
-        }
+        // TODO: check if note is protected, use biometry
+        // TODO: navigate to note details
+        // TODO: note edit (in note details) ???
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onDeleteClicked(note: Note) {
+        viewModel.deleteNote(note)
+        makeSnackBar(note)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) { // TODO: remove
         inflater.inflate(R.menu.options_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -104,15 +86,9 @@ class NotesFragment : BaseFragment(), NotesActions {
         viewModel.getNotes()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) { // TODO: remove
         R.id.menu_add_note -> {
             navigate?.navigate(NotesFragmentDirections.toNewNote())
-            true
-        }
-        R.id.menu_delete_note -> {
-            notesAdapter.setDeleteMode(true)
-            fragment_notes_remove_button.visibility = View.VISIBLE
-            fragment_notes_return_button.visibility = View.VISIBLE
             true
         }
         else -> false

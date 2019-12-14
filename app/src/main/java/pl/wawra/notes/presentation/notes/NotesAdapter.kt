@@ -13,34 +13,20 @@ import pl.wawra.notes.database.entities.Note
 class NotesAdapter(private val actions: NotesActions) :
     BaseAdapter<Note, NotesAdapter.NoteViewHolder>() {
 
-    private var deleteMode = false
-    val toRemove = HashSet<Note>()
-
-    fun setDeleteMode(isDeleteMode: Boolean) {
-        deleteMode = isDeleteMode
-        notifyDataSetChanged()
-    }
-
     override fun onBindViewHolder(holder: NoteViewHolder, item: Note) {
         holder.itemView.apply {
-            item_note_check_button.setOnClickListener { actions.onCheckedClicked(item) }
+            item_note_done_button.setOnClickListener { actions.onCheckedClicked(item) }
             item_note_text.setOnClickListener { actions.onNoteBodyClicked(item) }
-            item_note_text.text = item.body
+            item_note_text.text = item.title
             if (item.isChecked) {
                 item_note_text.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             } else {
                 item_note_text.paintFlags = Typeface.NORMAL
             }
-            item_note_checkbox.visibility = if (deleteMode) View.VISIBLE else View.INVISIBLE
-            item_note_check_button.visibility = if (deleteMode) View.INVISIBLE else View.VISIBLE
-            item_note_checkbox.isChecked = toRemove.contains(item)
-            item_note_checkbox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    toRemove.add(item)
-                } else {
-                    toRemove.remove(item)
-                }
+            item_note_delete_button.setOnClickListener {
+                actions.onDeleteClicked(item)
             }
+            item_note_date.text = "" // TODO: set note date and time
         }
     }
 

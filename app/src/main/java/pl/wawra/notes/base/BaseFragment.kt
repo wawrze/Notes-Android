@@ -14,7 +14,7 @@ open class BaseFragment : Fragment() {
             field = value
             showNavigationBack(value)
         }
-
+    // TODO: add Google and plus buttons
     protected var toolbarTitle: String = ""
         set(value) {
             field = value

@@ -6,5 +6,6 @@ interface NotesActions {
 
     fun onCheckedClicked(note: Note)
     fun onNoteBodyClicked(note: Note)
+    fun onDeleteClicked(note: Note)
 
 }

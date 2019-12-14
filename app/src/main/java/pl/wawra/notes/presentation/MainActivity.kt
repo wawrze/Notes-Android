@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         setSupportActionBar(activity_main_toolbar)
     }
 
+    // TODO: Google login / logout
     override fun getNavigationController() = findNavController(R.id.nav_host_fragment)
 
     override fun onSupportNavigateUp() = getNavigationController().navigateUp()

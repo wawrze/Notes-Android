@@ -14,7 +14,7 @@ import pl.wawra.notes.base.BaseFragment
 class NewNoteFragment : BaseFragment() {
 
     private lateinit var viewModel: NewNoteViewModel
-
+    // TODO: add voice to text, text from image, protection
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

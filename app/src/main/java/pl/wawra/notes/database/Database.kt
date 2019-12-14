@@ -35,4 +35,4 @@ abstract class Db : RoomDatabase() {
 
     }
 
-}
+} // TODO: Google user entity, note-GoogleUser many-to-many connection if note is synchronized

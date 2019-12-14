@@ -28,16 +28,16 @@ class NotesViewModel : ViewModel() {
         }
     }
 
-    fun deleteNotes(notesToDelete: List<Note>) {
+    fun deleteNote(noteToDelete: Note) {
         onBg {
-            noteDao.deleteByIds(notesToDelete.map { it.id }.toList())
+            noteDao.deleteById(noteToDelete.id)
             getNotes()
         }
     }
 
-    fun restoreNotes(notesToRestore: List<Note>) {
+    fun restoreNotes(noteToRestore: Note) {
         onBg {
-            noteDao.insert(notesToRestore.toList())
+            noteDao.insert(noteToRestore)
             getNotes()
         }
     }

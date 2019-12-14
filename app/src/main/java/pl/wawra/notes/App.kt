@@ -18,13 +18,13 @@ class App : MultiDexApplication() {
         onBg {
             if (Db.noteDao.getNotes().isEmpty()) {
                 val notesToInsert = ArrayList<Note>().apply {
-                    add(Note(body = "Notatka ostatnia"))
-                    add(Note(body = "Notatka kolejna"))
-                    add(Note(body = "https://www.youtube.com/watch?v=A0xQsrtD6yY"))
-                    add(Note(body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
-                    add(Note(body = "https://www.google.pl/"))
-                    add(Note(body = "Notatka druga"))
-                    add(Note(body = "Notatka pierwsza"))
+                    add(Note(title = "Notatka ostatnia"))
+                    add(Note(title = "Notatka kolejna"))
+                    add(Note(title = "https://www.youtube.com/watch?v=A0xQsrtD6yY"))
+                    add(Note(title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
+                    add(Note(title = "https://www.google.pl/"))
+                    add(Note(title = "Notatka druga"))
+                    add(Note(title = "Notatka pierwsza"))
                 }
                 Db.noteDao.insert(notesToInsert)
             }
