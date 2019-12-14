@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/blue"
     android:padding="10dp">
     <!--TODO: refactor-->
     <EditText
@@ -23,12 +23,10 @@
 
     <ImageButton
         android:id="@+id/fragment_new_note_save_button"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@android:color/darker_gray"
-        android:padding="20dp"
-        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
         android:src="@drawable/ic_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_new_note_input"
