@@ -14,7 +14,7 @@ class NotesViewModel : ViewModel() {
     val notesList: MutableLiveData<List<Note>> = MutableLiveData()
 
     fun changeNoteChecked(note: Note) {
-        note.isChecked = !note.isChecked
+        note.isDone = !note.isDone
         onBg {
             noteDao.insert(note)
             getNotes()

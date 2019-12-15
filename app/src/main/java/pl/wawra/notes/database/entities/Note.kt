@@ -2,6 +2,7 @@ package pl.wawra.notes.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity
 data class Note(
@@ -11,6 +12,12 @@ data class Note(
 
     var title: String = "",
 
-    var isChecked: Boolean = false
-// TODO: additional fields (body, date and time, is protected, Google sync)
+    var body: String = "",
+
+    var date: Long = Calendar.getInstance().timeInMillis,
+
+    var isDone: Boolean = false,
+
+    var isProtected: Boolean = false
+
 )

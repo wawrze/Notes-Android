@@ -9,7 +9,7 @@ import pl.wawra.notes.database.entities.Note
 @Dao
 interface NoteDao {
 
-    @Query("SELECT * FROM note ORDER BY isChecked, id DESC")
+    @Query("SELECT * FROM note ORDER BY isDone, date")
     fun getNotes(): List<Note>
 
     @Query("SELECT * FROM note WHERE id = :id LIMIT 1")

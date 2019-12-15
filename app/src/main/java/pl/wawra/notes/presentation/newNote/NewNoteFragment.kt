@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,6 @@ class NewNoteFragment : BaseFragment() {
     private lateinit var viewModel: NewNoteViewModel
     private var date = Calendar.getInstance()
 
-    // TODO: add voice to text, text from image, protection
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,9 +60,13 @@ class NewNoteFragment : BaseFragment() {
                 TimePickerDialog.OnTimeSetListener { _, h, m -> setTime(h, m) },
                 hour,
                 minute,
-                DateFormat.is24HourFormat(activity)
+                true
             ).show()
         }
+
+        // TODO: voice to text
+
+        // TODO: text from image
 
         // TODO: hide checkboxes / buttons if not possible to use
     }
@@ -86,8 +88,11 @@ class NewNoteFragment : BaseFragment() {
                 it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(it.window?.currentFocus?.applicationWindowToken, 0)
         }
-        val noteBody = fragment_new_note_title_input.text.toString()
-        viewModel.addNote(noteBody)
+        val noteTitle = fragment_new_note_title_input.text.toString()
+        val noteBody = fragment_new_note_body_input.text.toString()
+        val isProtected = fragment_new_note_protect_check_box.isChecked
+        val toSync = fragment_new_note_google_check_box.isChecked
+        viewModel.addNote(noteTitle, noteBody, date, isProtected, toSync)
         navigate?.navigateUp()
         Toast.makeText(context, getString(R.string.note_added), Toast.LENGTH_LONG).show()
     }
