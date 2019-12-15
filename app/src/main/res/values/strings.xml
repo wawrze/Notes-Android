@@ -12,4 +12,5 @@
     <string name="protect_note">Protect note</string>
     <string name="note_date_and_time">Date and time:</string>
     <string name="voice_recognition_not_available">Speech recognition not available on this device!</string>
+    <string name="text_recognition_error">Text recognition error!</string>
 </resources>

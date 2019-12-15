@@ -139,13 +139,17 @@ class NewNoteFragment : BaseFragment() {
     }
 
     private fun getTextFromImage(image: Bitmap) {
-        // TODO: some progress message
+        fragment_new_note_progress_bar.visibility = View.VISIBLE
         viewModel.recognizeTextFromImage(image).observe(
             viewLifecycleOwner,
             Observer {
-                // TODO: remove progress message
+                fragment_new_note_progress_bar.visibility = View.GONE
                 if (it.isNullOrBlank()) {
-                    // TODO: no text message
+                    Toast.makeText(
+                        context,
+                        getString(R.string.text_recognition_error),
+                        Toast.LENGTH_LONG
+                    ).show()
                 } else {
                     fragment_new_note_body_input.setText(it, TextView.BufferType.EDITABLE)
                 }

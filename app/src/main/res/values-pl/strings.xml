@@ -12,4 +12,5 @@
     <string name="undo">Cofnij</string>
     <string name="voice_recognition_not_available">Rozpoznawanie mowy nie jest dostępne na tym urządzeniu!</string>
     <string name="your_notes">Twoje notatki</string>
+    <string name="text_recognition_error">Błąd rozpoznawania tekstu!</string>
 </resources>
