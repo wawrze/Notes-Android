@@ -40,7 +40,7 @@ class NoteDetailsFragment : BaseFragment() {
         fragment_note_details_title.text = note.title
         fragment_note_details_body.text = note.body
         fragment_note_details_date_and_time.text = dateFormat.format(longToDate(note.date))
-        if (!note.isProtected) {
+        if (note.isProtected) {
             fragment_note_details_protected_image.visibility = View.VISIBLE
             fragment_note_details_protect_label.visibility = View.VISIBLE
         }

@@ -5,7 +5,7 @@ import pl.wawra.notes.database.entities.Note
 interface NotesActions {
 
     fun onCheckedClicked(note: Note)
-    fun onNoteBodyClicked(note: Note)
+    fun onNoteClicked(note: Note)
     fun onDeleteClicked(note: Note)
 
 }

@@ -50,15 +50,19 @@ dependencies {
 
     // view model
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.1.0'
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.1.0"
 
     // room
     implementation 'androidx.room:room-runtime:2.2.2'
     kapt 'androidx.room:room-compiler:2.2.2'
 
     // Google Cloud Vision API
+    //noinspection GradleDependency
     implementation 'com.google.api-client:google-api-client-android:1.22.0'
     implementation 'com.google.apis:google-api-services-vision:v1-rev357-1.22.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'commons-io:commons-io:2.5'
+    implementation 'commons-io:commons-io:20030203.000550'
+
+    // biometric
+    implementation 'androidx.biometric:biometric:1.0.0'
 }

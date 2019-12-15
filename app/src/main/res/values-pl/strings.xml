@@ -15,4 +15,10 @@
     <string name="text_recognition_error">Błąd rozpoznawania tekstu!</string>
     <string name="synced_with_google">Synchronizowana z kalendarzem Google</string>
     <string name="note_protected">Zabezpieczona</string>
+    <string name="biometric_dialog_title">Notatka zabezpieczona</string>
+    <string name="biometric_dialog_text">Aby wyświetlić notatkę, przyłóż palec do czytnika lini papilarnych.</string>
+    <string name="biometric_failed">Próba autoryzacji zakończona niepowodzeniem!</string>
+    <string name="biometric_error">Podczas próby autoryzacji wystąpił błąd!</string>
+    <string name="cancel">Anuluj</string>
+    <string name="biometric_unavailable">Notatka jest zabezpieczona, ale to urządzenie nie obsługuje biometrii!</string>
 </resources>

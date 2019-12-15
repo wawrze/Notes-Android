@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.biometric.BiometricManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_new_note.*
@@ -37,7 +38,29 @@ class NewNoteFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
         setTime(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE))
+        setUpListeners()
+        setUpGoogleSync()
+        setUpBiometric()
+    }
 
+    private fun setUpBiometric() {
+        context?.let {
+            val biometricManager = BiometricManager.from(it)
+            if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS) {
+                fragment_new_note_protect_label.visibility = View.VISIBLE
+                fragment_new_note_protect_check_box.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun setUpGoogleSync() {
+        if (false) { // TODO: check is user logged in to Google account
+            fragment_new_note_google_label.visibility = View.VISIBLE
+            fragment_new_note_google_check_box.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setUpListeners() {
         fragment_new_note_date_input.setOnClickListener {
             val year = date.get(Calendar.YEAR)
             val month = date.get(Calendar.MONTH)
@@ -73,8 +96,6 @@ class NewNoteFragment : BaseFragment() {
         fragment_new_note_camera_button.setOnClickListener {
             (activity as MainActivity).takePhoto { getTextFromImage(it) }
         }
-
-        // TODO: hide checkboxes / buttons if not possible to use
     }
 
     override fun onResume() {

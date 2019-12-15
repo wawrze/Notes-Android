@@ -20,8 +20,8 @@ class NotesAdapter(private val actions: NotesActions) :
 
     override fun onBindViewHolder(holder: NoteViewHolder, item: Note) {
         holder.itemView.apply {
+            setOnClickListener { actions.onNoteClicked(item) }
             item_note_done_button.setOnClickListener { actions.onCheckedClicked(item) }
-            item_note_text.setOnClickListener { actions.onNoteBodyClicked(item) }
             item_note_text.text = item.title
             if (item.isDone) {
                 item_note_text.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
@@ -32,6 +32,13 @@ class NotesAdapter(private val actions: NotesActions) :
                 actions.onDeleteClicked(item)
             }
             item_note_date.text = dateFormat.format(longToDate(item.date))
+            item_note_biometric_icon.visibility = if (item.isProtected) View.VISIBLE else View.GONE
+            item_note_google_icon.visibility =
+                if (false) { // TODO: check if note is Google synchronized
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
         }
     }
 

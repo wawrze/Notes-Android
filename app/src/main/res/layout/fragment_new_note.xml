@@ -125,8 +125,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:button="@drawable/check_box_selector"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_date_input" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_date_input"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/fragment_new_note_google_label"
@@ -135,9 +137,11 @@
         android:layout_marginStart="10dp"
         android:text="@string/sync_with_google"
         android:textSize="18sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/fragment_new_note_google_check_box"
         app:layout_constraintStart_toEndOf="@id/fragment_new_note_google_check_box"
-        app:layout_constraintTop_toTopOf="@id/fragment_new_note_google_check_box" />
+        app:layout_constraintTop_toTopOf="@id/fragment_new_note_google_check_box"
+        tools:visibility="visible" />
 
     <CheckBox
         android:id="@+id/fragment_new_note_protect_check_box"
@@ -145,8 +149,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:button="@drawable/check_box_selector"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_google_check_box" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_google_check_box"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/fragment_new_note_protect_label"
@@ -155,9 +161,11 @@
         android:layout_marginStart="10dp"
         android:text="@string/protect_note"
         android:textSize="18sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/fragment_new_note_protect_check_box"
         app:layout_constraintStart_toEndOf="@id/fragment_new_note_protect_check_box"
-        app:layout_constraintTop_toTopOf="@id/fragment_new_note_protect_check_box" />
+        app:layout_constraintTop_toTopOf="@id/fragment_new_note_protect_check_box"
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/fragment_new_note_progress_bar"
