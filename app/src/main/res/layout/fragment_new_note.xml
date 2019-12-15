@@ -4,21 +4,159 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
+    android:background="@color/dark_blue"
     android:padding="10dp">
-    <!--TODO: refactor-->
+
+    <TextView
+        android:id="@+id/fragment_new_note_title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/note_title"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
-        android:id="@+id/fragment_new_note_input"
+        android:id="@+id/fragment_new_note_title_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@android:color/white"
-        android:lines="10"
-        android:padding="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:lines="1"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_title_label"
         tools:ignore="Autofill,LabelFor,TextFields"
         tools:text="Lorem ipsum..." />
+
+    <TextView
+        android:id="@+id/fragment_new_note_body_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/note_body"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_title_input" />
+
+    <EditText
+        android:id="@+id/fragment_new_note_body_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/white"
+        android:gravity="top"
+        android:lines="10"
+        android:padding="5dp"
+        app:layout_constraintEnd_toStartOf="@id/fragment_new_note_camera_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_body_label"
+        tools:ignore="Autofill,LabelFor,TextFields"
+        tools:text="Lorem ipsum..." />
+
+    <ImageButton
+        android:id="@+id/fragment_new_note_camera_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_camera"
+        android:tint="@color/yellow"
+        app:layout_constraintBottom_toTopOf="@id/fragment_new_note_microphone_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fragment_new_note_body_input"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/fragment_new_note_microphone_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_microphone"
+        android:tint="@color/yellow"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_new_note_body_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_camera_button"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/fragment_new_note_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/note_date_and_time"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_body_input" />
+
+    <TextView
+        android:id="@+id/fragment_new_note_date_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/fragment_new_note_time_input"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_date_label"
+        tools:text="01/01/2020" />
+
+    <TextView
+        android:id="@+id/fragment_new_note_time_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fragment_new_note_date_input"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_date_label"
+        tools:text="12:34" />
+
+    <CheckBox
+        android:id="@+id/fragment_new_note_google_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:button="@drawable/check_box_selector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_date_input" />
+
+    <TextView
+        android:id="@+id/fragment_new_note_google_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/sync_with_google"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_new_note_google_check_box"
+        app:layout_constraintStart_toEndOf="@id/fragment_new_note_google_check_box"
+        app:layout_constraintTop_toTopOf="@id/fragment_new_note_google_check_box" />
+
+    <CheckBox
+        android:id="@+id/fragment_new_note_protect_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:button="@drawable/check_box_selector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_new_note_google_check_box" />
+
+    <TextView
+        android:id="@+id/fragment_new_note_protect_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/protect_note"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_new_note_protect_check_box"
+        app:layout_constraintStart_toEndOf="@id/fragment_new_note_protect_check_box"
+        app:layout_constraintTop_toTopOf="@id/fragment_new_note_protect_check_box" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

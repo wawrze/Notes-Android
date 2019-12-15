@@ -39,7 +39,7 @@ class NewNoteFragment : BaseFragment() {
                         it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(it.window?.currentFocus?.applicationWindowToken, 0)
                 }
-                val noteBody = fragment_new_note_input.text.toString()
+                val noteBody = fragment_new_note_title_input.text.toString()
                 viewModel.addNote(noteBody)
                 navigate?.navigateUp()
                 Toast.makeText(context, getString(R.string.note_added), Toast.LENGTH_LONG).show()
