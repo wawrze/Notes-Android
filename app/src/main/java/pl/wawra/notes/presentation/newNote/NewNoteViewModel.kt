@@ -60,7 +60,7 @@ class NewNoteViewModel : ViewModel() {
                     AndroidJsonFactory(),
                     null
                 ).setVisionRequestInitializer(
-                    VisionRequestInitializer("AIzaSyBt33ULbyfY80MyqfPvrHxZQJUxFoBuX_c")
+                    VisionRequestInitializer("GOOGLE API KEY")
                 ).build()
 
                 val inputImage = Image().apply { encodeContent(byteArray) }
