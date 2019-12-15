@@ -1,14 +1,20 @@
 package pl.wawra.notes.presentation
 
+import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.wawra.notes.R
@@ -46,6 +52,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         activity_main_top_bar_right_button.setImageResource(res)
     }
 
+    private var editToAppendFromMicrophone: EditText? = null
     fun voiceToText(editText: EditText) {
         try {
             editToAppendFromMicrophone = editText
@@ -67,7 +74,28 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         }
     }
 
-    private var editToAppendFromMicrophone: EditText? = null
+    private var cameraCallBack: ((Bitmap) -> Unit)? = null
+    fun takePhoto(callBack: (Bitmap) -> Unit) {
+        cameraCallBack = callBack
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                CAMERA_PERM_REQUEST
+            )
+        } else {
+            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                takePictureIntent.resolveActivity(packageManager)?.also {
+                    startActivityForResult(takePictureIntent, CAMERA_RC)
+                }
+            }
+        }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
@@ -79,12 +107,34 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                     )
                     editToAppendFromMicrophone = null
                 }
+                CAMERA_RC -> {
+                    val imageBitmap = data?.extras?.get("data") as Bitmap
+                    cameraCallBack?.invoke(imageBitmap)
+                    cameraCallBack = null
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERM_REQUEST) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takePhoto { cameraCallBack }
+            } else {
+                // TODO: no permission message
+            }
+        }
+    }
+
     companion object {
+        private const val CAMERA_PERM_REQUEST = 111
+        private const val CAMERA_RC = 333
         private const val SPEECH_REQUEST_CODE = 666
     }
 

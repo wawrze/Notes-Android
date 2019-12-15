@@ -3,12 +3,15 @@ package pl.wawra.notes.presentation.newNote
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import pl.wawra.notes.R
@@ -67,8 +70,9 @@ class NewNoteFragment : BaseFragment() {
         fragment_new_note_microphone_button.setOnClickListener {
             (activity as MainActivity).voiceToText(fragment_new_note_body_input)
         }
-
-        // TODO: text from image
+        fragment_new_note_camera_button.setOnClickListener {
+            (activity as MainActivity).takePhoto { getTextFromImage(it) }
+        }
 
         // TODO: hide checkboxes / buttons if not possible to use
     }
@@ -132,6 +136,21 @@ class NewNoteFragment : BaseFragment() {
         stringBuilder.append(minute)
 
         fragment_new_note_time_input.text = stringBuilder.toString()
+    }
+
+    private fun getTextFromImage(image: Bitmap) {
+        // TODO: some progress message
+        viewModel.recognizeTextFromImage(image).observe(
+            viewLifecycleOwner,
+            Observer {
+                // TODO: remove progress message
+                if (it.isNullOrBlank()) {
+                    // TODO: no text message
+                } else {
+                    fragment_new_note_body_input.setText(it, TextView.BufferType.EDITABLE)
+                }
+            }
+        )
     }
 
 }
