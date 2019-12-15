@@ -13,4 +13,6 @@
     <string name="voice_recognition_not_available">Rozpoznawanie mowy nie jest dostępne na tym urządzeniu!</string>
     <string name="your_notes">Twoje notatki</string>
     <string name="text_recognition_error">Błąd rozpoznawania tekstu!</string>
+    <string name="synced_with_google">Synchronizowana z kalendarzem Google</string>
+    <string name="note_protected">Zabezpieczona</string>
 </resources>

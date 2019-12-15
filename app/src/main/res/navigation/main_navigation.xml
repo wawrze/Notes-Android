@@ -17,11 +17,30 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
+        <action
+            android:id="@+id/to_note_details"
+            app:destination="@id/fragment_note_details"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
     </fragment>
 
     <fragment
         android:id="@+id/fragment_new_note"
         android:name="pl.wawra.notes.presentation.newNote.NewNoteFragment"
         android:label="NewNoteFragment" />
+
+    <fragment
+        android:id="@+id/fragment_note_details"
+        android:name="pl.wawra.notes.presentation.noteDetails.NoteDetailsFragment"
+        android:label="NoteDetailsFragment">
+
+        <argument
+            android:name="noteId"
+            app:argType="long" />
+
+    </fragment>
 
 </navigation>

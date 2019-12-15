@@ -59,8 +59,7 @@ class NotesFragment : BaseFragment(), NotesActions {
 
     override fun onNoteBodyClicked(note: Note) {
         // TODO: check if note is protected, use biometry
-        // TODO: navigate to note details
-        // TODO: note edit (in note details) ???
+        navigate?.navigate(NotesFragmentDirections.toNoteDetails(note.id))
     }
 
     override fun onDeleteClicked(note: Note) {
