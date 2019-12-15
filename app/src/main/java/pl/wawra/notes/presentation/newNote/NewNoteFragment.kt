@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_new_note.*
 import pl.wawra.notes.R
 import pl.wawra.notes.base.BaseFragment
+import pl.wawra.notes.presentation.MainActivity
 import java.util.*
 
 class NewNoteFragment : BaseFragment() {
@@ -63,8 +64,9 @@ class NewNoteFragment : BaseFragment() {
                 true
             ).show()
         }
-
-        // TODO: voice to text
+        fragment_new_note_microphone_button.setOnClickListener {
+            (activity as MainActivity).voiceToText(fragment_new_note_body_input)
+        }
 
         // TODO: text from image
 

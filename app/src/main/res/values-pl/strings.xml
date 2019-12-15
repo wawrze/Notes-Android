@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="new_note">Nowa notatka</string>
+    <string name="note_added">Dodano notatkę.</string>
+    <string name="note_body">Treść notatki:</string>
+    <string name="note_date_and_time">Data i godzina:</string>
+    <string name="note_deleted">Usunięto notatkę.</string>
+    <string name="note_title">Tytuł notatki:</string>
+    <string name="protect_note">Zabezpiecz notatkę</string>
+    <string name="sync_with_google">Synchronizuj z kalendarzem Google</string>
+    <string name="undo">Cofnij</string>
+    <string name="voice_recognition_not_available">Rozpoznawanie mowy nie jest dostępne na tym urządzeniu!</string>
+    <string name="your_notes">Twoje notatki</string>
+</resources>

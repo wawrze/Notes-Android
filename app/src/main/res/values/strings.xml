@@ -1,14 +1,15 @@
 <resources>
-    <string name="app_name">MW Zad 2 Android</string>
+    <string name="app_name">Notes</string>
 
-    <string name="your_notes">Twoje notatki</string>
-    <string name="new_note">Nowa notatka</string>
-    <string name="note_deleted">Usunięto notatkę.</string>
-    <string name="note_added">Dodano notatkę.</string>
-    <string name="undo">Cofnij</string>
-    <string name="note_title">Tytuł notatki:</string>
-    <string name="note_body">Treść notatki:</string>
-    <string name="sync_with_google">Synchronizuj z kalendarzem Google</string>
-    <string name="protect_note">Zabezpiecz notatkę</string>
-    <string name="note_date_and_time">Data i godzina:</string>
+    <string name="your_notes">Your notes</string>
+    <string name="new_note">New note</string>
+    <string name="note_deleted">Note deleted.</string>
+    <string name="note_added">Note added.</string>
+    <string name="undo">Undo</string>
+    <string name="note_title">Note title:</string>
+    <string name="note_body">Note body:</string>
+    <string name="sync_with_google">Synchronize with Google calendar</string>
+    <string name="protect_note">Protect note</string>
+    <string name="note_date_and_time">Date and time:</string>
+    <string name="voice_recognition_not_available">Speech recognition not available on this device!</string>
 </resources>
