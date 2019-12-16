@@ -13,7 +13,7 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         Db.init(this)
-        addNotesToDb()
+        if (BuildConfig.DEBUG) addNotesToDb()
     }
 
     private fun addNotesToDb() {
