@@ -74,6 +74,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
 
-    // Google Play service auth
+    // Google services
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev312-1.23.0'
+    implementation 'com.google.http-client:google-http-client-gson:1.23.0'
 }

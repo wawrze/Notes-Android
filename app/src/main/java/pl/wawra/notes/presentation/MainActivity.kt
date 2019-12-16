@@ -3,7 +3,6 @@ package pl.wawra.notes.presentation
 import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -23,12 +22,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.client.util.ExponentialBackOff
+import com.google.api.services.calendar.Calendar
+import com.google.api.services.calendar.CalendarScopes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.wawra.notes.R
 import pl.wawra.notes.base.Navigation
 import pl.wawra.notes.base.ToolbarInteraction
+import pl.wawra.notes.utils.onBg
 
 class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
 
@@ -141,7 +148,8 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                     cameraCallBack = null
                 }
                 RC_SIGN_IN -> {
-                    val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                    val task: Task<GoogleSignInAccount> =
+                        GoogleSignIn.getSignedInAccountFromIntent(data)
                     try {
                         task.getResult(ApiException::class.java)?.let {
                             firebaseAuthWithGoogle(it)
@@ -162,9 +170,14 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERM_REQUEST) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        when (requestCode) {
+            CAMERA_PERM_REQUEST -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 takePhoto { cameraCallBack }
+            } else {
+                // TODO: no permission message
+            }
+            CALENDAR_PERM_REQUEST -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCalendarList()
             } else {
                 // TODO: no permission message
             }
@@ -184,6 +197,21 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
+
+    private lateinit var calendar: Calendar
+    private fun getCalendarList() {
+        onBg {
+            try {
+                val list = calendar.calendarList().list().setFields("items(id)").execute()
+                val mainCalendar = list.items[0].id
+                val events = calendar.Events().list(mainCalendar).execute()
+                println()
+            } catch (e: UserRecoverableAuthIOException) {
+                startActivityForResult(e.intent, CALENDAR_PERM_REQUEST)
+            }
+        }
+    }
+
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
@@ -194,6 +222,18 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                 val email = acct.email
                 val id = acct.id
                 val token = acct.idToken
+
+                val cred = GoogleAccountCredential
+                    .usingOAuth2(this@MainActivity, setOf(CalendarScopes.CALENDAR_READONLY))
+                    .setBackOff(ExponentialBackOff())
+                    .setSelectedAccountName(account?.name)
+                calendar = Calendar.Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    GsonFactory.getDefaultInstance(),
+                    cred
+                ).setApplicationName("Notes").build()
+
+                getCalendarList()
             } else {
                 // TODO: Google log in error message
                 Toast.makeText(this, "", Toast.LENGTH_LONG).show()
@@ -204,6 +244,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
     companion object {
         private const val RC_SIGN_IN: Int = 1
         private const val CAMERA_PERM_REQUEST = 111
+        private const val CALENDAR_PERM_REQUEST = 222
         private const val CAMERA_RC = 333
         private const val SPEECH_REQUEST_CODE = 666
     }
