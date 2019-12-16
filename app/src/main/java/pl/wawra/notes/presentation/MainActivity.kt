@@ -36,16 +36,25 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         activity_main_top_bar_title.text = title
     }
 
-    override fun setLeftButtonAction(action: () -> Any) {
-        activity_main_top_bar_left_button.setOnClickListener { action.invoke() }
+    override fun setLeftButtonAction(action: (() -> Any)?) {
+        if (action != null) {
+            activity_main_top_bar_left_button.setOnClickListener { action.invoke() }
+        } else {
+            // TODO: Google login / logout
+        }
     }
 
     override fun setRightButtonAction(action: () -> Any) {
         activity_main_top_bar_right_button.setOnClickListener { action.invoke() }
     }
 
-    override fun setLeftButtonIcon(res: Int) {
-        activity_main_top_bar_left_button.setImageResource(res)
+    override fun setLeftButtonIcon(res: Int?) {
+        if (res != null) {
+            activity_main_top_bar_left_button.setImageResource(res)
+        } else {
+            // TODO: check if user is logged in to Google
+            activity_main_top_bar_left_button.setImageResource(R.drawable.ic_google_light)
+        }
     }
 
     override fun setRightButtonIcon(res: Int) {

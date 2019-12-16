@@ -140,9 +140,9 @@ class NotesFragment : BaseFragment(), NotesActions {
         super.onResume()
         setUpTopBar(
             getString(R.string.your_notes),
-            { /* TODO: Google login / logout*/ },
+            null,
             { navigate?.navigate(NotesFragmentDirections.toNewNote()) },
-            R.drawable.ic_google_light,
+            null,
             R.drawable.ic_add
         )
         viewModel.getNotes()

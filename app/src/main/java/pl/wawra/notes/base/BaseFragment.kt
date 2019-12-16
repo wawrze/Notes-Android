@@ -23,9 +23,9 @@ abstract class BaseFragment : Fragment() {
 
     protected fun setUpTopBar(
         title: String,
-        leftButtonAction: () -> Unit,
+        leftButtonAction: (() -> Unit)?,
         rightButtonAction: () -> Unit,
-        leftIconRes: Int,
+        leftIconRes: Int?,
         rightIconRes: Int
     ) {
         toolbarInteraction?.setTopBarTitle(title)
