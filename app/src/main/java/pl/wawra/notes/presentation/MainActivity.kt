@@ -22,32 +22,40 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.json.gson.GsonFactory
-import com.google.api.client.util.ExponentialBackOff
-import com.google.api.services.calendar.Calendar
-import com.google.api.services.calendar.CalendarScopes
+import com.google.api.services.calendar.model.CalendarList
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.wawra.notes.R
 import pl.wawra.notes.base.Navigation
 import pl.wawra.notes.base.ToolbarInteraction
+import pl.wawra.notes.calendar.CalendarClient
+import pl.wawra.notes.database.Db
+import pl.wawra.notes.database.daos.GoogleUserDao
+import pl.wawra.notes.database.entities.GoogleUser
 import pl.wawra.notes.utils.onBg
+import pl.wawra.notes.utils.onUi
 
 class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
     lateinit var mGoogleSignInOptions: GoogleSignInOptions
     private lateinit var firebaseAuth: FirebaseAuth
+    private var googleUserDao: GoogleUserDao = Db.googleUserDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         configureGoogleSignIn()
         firebaseAuth = FirebaseAuth.getInstance()
+
+        onBg {
+            val user = googleUserDao.getUser()
+            if (user != null) {
+                firebaseAuthWithGoogle(user.token, user.accountName)
+            }
+        }
     }
 
     override fun getNavigationController() = findNavController(R.id.nav_host_fragment)
@@ -62,10 +70,21 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         if (action != null) {
             activity_main_top_bar_left_button.setOnClickListener { action.invoke() }
         } else {
-            // TODO: Google login / logout
-            // FirebaseAuth.getInstance().signOut()
-            activity_main_top_bar_left_button.setOnClickListener {
-                signIn()
+            onBg {
+                val user = googleUserDao.getUser()
+                onUi {
+                    if (user != null) {
+                        activity_main_top_bar_left_button.setOnClickListener {
+                            FirebaseAuth.getInstance().signOut()
+                            onBg { googleUserDao.delete() }
+                            setLeftButtonIcon(null)
+                        }
+                    } else {
+                        activity_main_top_bar_left_button.setOnClickListener {
+                            signIn()
+                        }
+                    }
+                }
             }
         }
     }
@@ -78,8 +97,14 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         if (res != null) {
             activity_main_top_bar_left_button.setImageResource(res)
         } else {
-            // TODO: check if user is logged in to Google
-            activity_main_top_bar_left_button.setImageResource(R.drawable.ic_google_light)
+            onBg {
+                val user = googleUserDao.getUser()
+                onUi {
+                    activity_main_top_bar_left_button.setImageResource(
+                        if (user != null) R.drawable.ic_google_dark else R.drawable.ic_google_light
+                    )
+                }
+            }
         }
     }
 
@@ -152,7 +177,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                         GoogleSignIn.getSignedInAccountFromIntent(data)
                     try {
                         task.getResult(ApiException::class.java)?.let {
-                            firebaseAuthWithGoogle(it)
+                            firebaseAuthWithGoogle(it.idToken.orEmpty(), it.account?.name.orEmpty())
                         }
                     } catch (e: ApiException) {
                         // TODO: Google log in error message
@@ -177,7 +202,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                 // TODO: no permission message
             }
             CALENDAR_PERM_REQUEST -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCalendarList()
+                getMainCalendarId()
             } else {
                 // TODO: no permission message
             }
@@ -197,47 +222,37 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-
-    private lateinit var calendar: Calendar
-    private fun getCalendarList() {
-        onBg {
-            try {
-                val list = calendar.calendarList().list().setFields("items(id)").execute()
-                val mainCalendar = list.items[0].id
-                val events = calendar.Events().list(mainCalendar).execute()
-                println()
-            } catch (e: UserRecoverableAuthIOException) {
-                startActivityForResult(e.intent, CALENDAR_PERM_REQUEST)
-            }
+    private fun getMainCalendarId() {
+        try {
+            val list =
+                CalendarClient.instance?.calendarList()?.list()?.setFields("items(id)")?.execute()
+                    ?: CalendarList()
+            val mainCalendar = list.items[0].id
+            googleUserDao.updateMainCalendar(mainCalendar)
+        } catch (e: UserRecoverableAuthIOException) {
+            startActivityForResult(e.intent, CALENDAR_PERM_REQUEST)
         }
     }
 
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+    private fun firebaseAuthWithGoogle(token: String, accountName: String) {
+        val credential = GoogleAuthProvider.getCredential(token, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                // TODO: Google log in success
-                val account = acct.account
-                val name = acct.displayName
-                val email = acct.email
-                val id = acct.id
-                val token = acct.idToken
-
-                val cred = GoogleAccountCredential
-                    .usingOAuth2(this@MainActivity, setOf(CalendarScopes.CALENDAR_READONLY))
-                    .setBackOff(ExponentialBackOff())
-                    .setSelectedAccountName(account?.name)
-                calendar = Calendar.Builder(
-                    AndroidHttp.newCompatibleTransport(),
-                    GsonFactory.getDefaultInstance(),
-                    cred
-                ).setApplicationName("Notes").build()
-
-                getCalendarList()
+                CalendarClient.initCalendar(accountName, this)
+                onBg {
+                    googleUserDao.insert(
+                        GoogleUser().apply {
+                            this.token = token
+                            this.accountName = accountName
+                        }
+                    )
+                    getMainCalendarId()
+                }
             } else {
                 // TODO: Google log in error message
                 Toast.makeText(this, "", Toast.LENGTH_LONG).show()
             }
+            setLeftButtonIcon(null)
         }
     }
 
