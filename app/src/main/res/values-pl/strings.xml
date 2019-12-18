@@ -23,5 +23,5 @@
     <string name="biometric_unavailable">Notatka jest zabezpieczona, ale to urządzenie nie obsługuje biometrii!</string>
     <string name="sync_in_progress">Proszę czekać, trwa synchronizacja z Google…</string>
     <string name="note_added_sync_failed">Dodano lokalnie notatkę, jednak synchronizacja z Google zakończyła się niepowodzeniem…</string>
-    <string name="note_added_sync_success">Dodano oraz zsynchronizowano notatkę z Google.</string>
+    <string name="note_added_sync_success">Dodano notatkę oraz zsynchronizowano z Google.</string>
 </resources>

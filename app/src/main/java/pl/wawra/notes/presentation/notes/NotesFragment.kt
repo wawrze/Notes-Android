@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_notes.*
 import pl.wawra.notes.R
 import pl.wawra.notes.base.BaseFragment
+import pl.wawra.notes.presentation.MainActivity
 import pl.wawra.notes.utils.modelHelpers.NoteWithCalendarEventId
 import java.util.concurrent.Executor
 
@@ -146,6 +147,11 @@ class NotesFragment : BaseFragment(), NotesActions {
             R.drawable.ic_add
         )
         viewModel.getNotes()
+        (activity as MainActivity).refreshNotesListCallBack = { viewModel.getNotes() }
     }
 
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).refreshNotesListCallBack = null
+    }
 }

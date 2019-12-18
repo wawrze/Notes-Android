@@ -32,17 +32,18 @@ import pl.wawra.notes.base.Navigation
 import pl.wawra.notes.base.ToolbarInteraction
 import pl.wawra.notes.calendar.CalendarClient
 import pl.wawra.notes.database.Db
-import pl.wawra.notes.database.daos.GoogleUserDao
 import pl.wawra.notes.database.entities.GoogleUser
 import pl.wawra.notes.utils.onBg
 import pl.wawra.notes.utils.onUi
 
 class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
 
-    lateinit var mGoogleSignInClient: GoogleSignInClient
-    lateinit var mGoogleSignInOptions: GoogleSignInOptions
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var mGoogleSignInOptions: GoogleSignInOptions
     private lateinit var firebaseAuth: FirebaseAuth
-    private var googleUserDao: GoogleUserDao = Db.googleUserDao
+    private val googleUserDao = Db.googleUserDao
+
+    var refreshNotesListCallBack: (() -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +79,8 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                             FirebaseAuth.getInstance().signOut()
                             onBg { googleUserDao.delete() }
                             setLeftButtonIcon(null)
-                            // TODO: refresh adapter
+                            refreshNotesListCallBack?.invoke()
+                            setLeftButtonAction(null)
                         }
                     } else {
                         activity_main_top_bar_left_button.setOnClickListener {
@@ -249,12 +251,13 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                     )
                     getMainCalendarId()
                 }
-                // TODO: refresh adapter
+                refreshNotesListCallBack?.invoke()
             } else {
                 // TODO: Google log in error message
                 Toast.makeText(this, "", Toast.LENGTH_LONG).show()
             }
             setLeftButtonIcon(null)
+            setLeftButtonAction(null)
         }
     }
 
