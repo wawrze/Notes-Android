@@ -1,11 +1,11 @@
 package pl.wawra.notes.presentation.notes
 
-import pl.wawra.notes.database.entities.Note
+import pl.wawra.notes.utils.modelHelpers.NoteWithCalendarEventId
 
 interface NotesActions {
 
-    fun onCheckedClicked(note: Note)
-    fun onNoteClicked(note: Note)
-    fun onDeleteClicked(note: Note)
+    fun onCheckedClicked(note: NoteWithCalendarEventId)
+    fun onNoteClicked(note: NoteWithCalendarEventId)
+    fun onDeleteClicked(note: NoteWithCalendarEventId)
 
 }

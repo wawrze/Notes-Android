@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_notes.*
 import pl.wawra.notes.R
 import pl.wawra.notes.base.BaseFragment
-import pl.wawra.notes.database.entities.Note
+import pl.wawra.notes.utils.modelHelpers.NoteWithCalendarEventId
 import java.util.concurrent.Executor
 
 class NotesFragment : BaseFragment(), NotesActions {
@@ -51,7 +51,7 @@ class NotesFragment : BaseFragment(), NotesActions {
         )
     }
 
-    private fun makeSnackBar(noteToRestore: Note) {
+    private fun makeSnackBar(noteToRestore: NoteWithCalendarEventId) {
         view?.let {
             Snackbar.make(
                 it,
@@ -100,11 +100,11 @@ class NotesFragment : BaseFragment(), NotesActions {
         biometricPrompt.authenticate(promptInfo)
     }
 
-    override fun onCheckedClicked(note: Note) {
+    override fun onCheckedClicked(note: NoteWithCalendarEventId) {
         viewModel.changeNoteChecked(note)
     }
 
-    override fun onNoteClicked(note: Note) {
+    override fun onNoteClicked(note: NoteWithCalendarEventId) {
         if (note.isProtected) {
             context?.let {
                 val biometricManager = BiometricManager.from(it)
@@ -123,7 +123,7 @@ class NotesFragment : BaseFragment(), NotesActions {
         }
     }
 
-    override fun onDeleteClicked(note: Note) {
+    override fun onDeleteClicked(note: NoteWithCalendarEventId) {
         viewModel.deleteNote(note)
         makeSnackBar(note)
     }

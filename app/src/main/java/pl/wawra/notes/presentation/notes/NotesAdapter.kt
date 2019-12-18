@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlinx.android.synthetic.main.item_note.view.*
 import pl.wawra.notes.R
 import pl.wawra.notes.base.BaseAdapter
-import pl.wawra.notes.database.entities.Note
 import pl.wawra.notes.utils.longToDate
+import pl.wawra.notes.utils.modelHelpers.NoteWithCalendarEventId
 import java.text.SimpleDateFormat
 import java.util.*
 
 class NotesAdapter(private val actions: NotesActions) :
-    BaseAdapter<Note, NotesAdapter.NoteViewHolder>() {
+    BaseAdapter<NoteWithCalendarEventId, NotesAdapter.NoteViewHolder>() {
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
-    override fun onBindViewHolder(holder: NoteViewHolder, item: Note) {
+    override fun onBindViewHolder(holder: NoteViewHolder, item: NoteWithCalendarEventId) {
         holder.itemView.apply {
             setOnClickListener { actions.onNoteClicked(item) }
             item_note_done_button.setOnClickListener { actions.onCheckedClicked(item) }
@@ -34,10 +34,10 @@ class NotesAdapter(private val actions: NotesActions) :
             item_note_date.text = dateFormat.format(longToDate(item.date))
             item_note_biometric_icon.visibility = if (item.isProtected) View.VISIBLE else View.GONE
             item_note_google_icon.visibility =
-                if (false) { // TODO: check if note is Google synchronized
-                    View.VISIBLE
-                } else {
+                if (item.calendarEventId.isNullOrBlank()) {
                     View.GONE
+                } else {
+                    View.VISIBLE
                 }
         }
     }

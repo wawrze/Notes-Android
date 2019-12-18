@@ -7,17 +7,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
-import com.google.api.client.util.DateTime
-import com.google.api.services.calendar.model.Event
-import com.google.api.services.calendar.model.EventDateTime
 import kotlinx.android.synthetic.main.fragment_note_details.*
 import pl.wawra.notes.R
 import pl.wawra.notes.base.BaseFragment
-import pl.wawra.notes.calendar.CalendarClient
-import pl.wawra.notes.database.Db
-import pl.wawra.notes.database.entities.Note
 import pl.wawra.notes.utils.longToDate
-import pl.wawra.notes.utils.onBg
+import pl.wawra.notes.utils.modelHelpers.NoteWithCalendarEventId
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,7 +36,7 @@ class NoteDetailsFragment : BaseFragment() {
         viewModel.note.observe(viewLifecycleOwner, Observer { bindNote(it) })
     }
 
-    private fun bindNote(note: Note) {
+    private fun bindNote(note: NoteWithCalendarEventId) {
         fragment_note_details_title.text = note.title
         fragment_note_details_body.text = note.body
         fragment_note_details_date_and_time.text = dateFormat.format(longToDate(note.date))
@@ -50,7 +44,7 @@ class NoteDetailsFragment : BaseFragment() {
             fragment_note_details_protected_image.visibility = View.VISIBLE
             fragment_note_details_protect_label.visibility = View.VISIBLE
         }
-        if (false) { // TODO: show Google sync info
+        if (!note.calendarEventId.isNullOrBlank()) {
             fragment_note_details_google_image.visibility = View.VISIBLE
             fragment_note_details_google_label.visibility = View.VISIBLE
         }
@@ -70,35 +64,6 @@ class NoteDetailsFragment : BaseFragment() {
 
     private fun editNote() {
         // TODO: navigate to edit note fragment
-
-        onBg {
-            val googleUserDao = Db.googleUserDao
-
-            val mainCalendar = googleUserDao.getUsersMainCalendar()
-
-            if (mainCalendar != null) {
-
-                val newEvent = Event()
-                    .setSummary("title")
-                    .setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
-                    .apply {
-                        val date = Calendar.getInstance()
-                        start = EventDateTime()
-                            .setDateTime(DateTime(date.timeInMillis))
-                        end = EventDateTime()
-                            .setDateTime(DateTime(date.timeInMillis))
-                    }
-
-
-                val addConfirmation =
-                    CalendarClient.instance?.Events()?.insert(mainCalendar, newEvent)?.execute()
-            }
-
-//            val status = addConfirmation?.status // "confirmed"
-//            val id = addConfirmation?.id
-
-//            CalendarClient.instance?.Events()?.delete(mainCalendar, id)?.execute()
-        }
     }
 
 }

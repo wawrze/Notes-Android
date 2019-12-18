@@ -39,8 +39,12 @@ class NewNoteFragment : BaseFragment() {
         setDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
         setTime(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE))
         setUpListeners()
-        setUpGoogleSync()
         setUpBiometric()
+        viewModel.isUserLoggedIn.observe(
+            viewLifecycleOwner,
+            Observer { setUpGoogleSync(it) }
+        )
+        viewModel.isUserLoggedIn()
     }
 
     private fun setUpBiometric() {
@@ -53,8 +57,8 @@ class NewNoteFragment : BaseFragment() {
         }
     }
 
-    private fun setUpGoogleSync() {
-        if (false) { // TODO: check is user logged in to Google account
+    private fun setUpGoogleSync(isUserLoggedIn: Boolean) {
+        if (isUserLoggedIn) {
             fragment_new_note_google_label.visibility = View.VISIBLE
             fragment_new_note_google_check_box.visibility = View.VISIBLE
         }

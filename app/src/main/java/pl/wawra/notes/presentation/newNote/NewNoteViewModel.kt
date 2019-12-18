@@ -5,14 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.api.client.extensions.android.json.AndroidJsonFactory
 import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.util.DateTime
+import com.google.api.services.calendar.model.Event
+import com.google.api.services.calendar.model.EventDateTime
 import com.google.api.services.vision.v1.Vision
 import com.google.api.services.vision.v1.VisionRequestInitializer
 import com.google.api.services.vision.v1.model.AnnotateImageRequest
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest
 import com.google.api.services.vision.v1.model.Feature
 import com.google.api.services.vision.v1.model.Image
+import pl.wawra.notes.calendar.CalendarClient
 import pl.wawra.notes.database.Db
-import pl.wawra.notes.database.daos.NoteDao
+import pl.wawra.notes.database.entities.CalendarEvent
 import pl.wawra.notes.database.entities.Note
 import pl.wawra.notes.utils.onBg
 import java.io.ByteArrayOutputStream
@@ -21,7 +25,11 @@ import java.util.*
 
 class NewNoteViewModel : ViewModel() {
 
-    private var noteDao: NoteDao = Db.noteDao
+    private val noteDao = Db.noteDao
+    private val googleUserDao = Db.googleUserDao
+    private val calendarEventDao = Db.calendarEventDao
+
+    val isUserLoggedIn = MutableLiveData<Boolean>()
 
     fun addNote(
         title: String,
@@ -31,7 +39,7 @@ class NewNoteViewModel : ViewModel() {
         toSync: Boolean
     ) {
         onBg {
-            noteDao.insert(
+            val noteId = noteDao.insert(
                 Note(
                     title = title,
                     body = body,
@@ -40,8 +48,47 @@ class NewNoteViewModel : ViewModel() {
                 )
             )
             if (toSync) {
-                // TODO: send note to Google calendar
+                // TODO: show progress bar
+                val user = googleUserDao.getUser()
+                if (user?.mainCalendar != null) {
+                    val newEvent = Event()
+                        .setSummary(title)
+                        .setDescription(body)
+                        .apply {
+                            start = EventDateTime()
+                                .setDateTime(DateTime(date.timeInMillis))
+                            end = EventDateTime()
+                                .setDateTime(DateTime(date.timeInMillis))
+                        }
+                    val confirmation = CalendarClient.instance
+                        ?.Events()
+                        ?.insert(user.mainCalendar, newEvent)
+                        ?.execute()
+
+                    // TODO: hide progress bar
+
+                    if (confirmation?.id != null) {
+                        calendarEventDao.insert(
+                            CalendarEvent().apply {
+                                id = confirmation.id
+                                this.noteId = noteId
+                                googleUser = user.mainCalendar
+                            }
+                        )
+                        // TODO: success message
+                    } else {
+                        // TODO: error message
+                    }
+                } else {
+                    // TODO: error message
+                }
             }
+        }
+    }
+
+    fun isUserLoggedIn() {
+        onBg {
+            isUserLoggedIn.postValue(googleUserDao.getUser() != null)
         }
     }
 
