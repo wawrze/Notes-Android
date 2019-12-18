@@ -24,4 +24,7 @@
     <string name="sync_in_progress">Proszę czekać, trwa synchronizacja z Google…</string>
     <string name="note_added_sync_failed">Dodano lokalnie notatkę, jednak synchronizacja z Google zakończyła się niepowodzeniem…</string>
     <string name="note_added_sync_success">Dodano notatkę oraz zsynchronizowano z Google.</string>
+    <string name="google_sign_in_failed">Nie udało się zalogować na konto Google!</string>
+    <string name="no_camera_permission">Nie przyznano zezwolenia na dostęp do aparatu!</string>
+    <string name="no_calendar_permission">Nie przyznano zezwolenia na dostęp do kalendarza!</string>
 </resources>

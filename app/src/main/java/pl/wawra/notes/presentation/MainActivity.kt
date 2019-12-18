@@ -183,8 +183,11 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                             firebaseAuthWithGoogle(it.idToken.orEmpty(), it.account?.name.orEmpty())
                         }
                     } catch (e: ApiException) {
-                        // TODO: Google log in error message
-                        Toast.makeText(this, "", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.google_sign_in_failed),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
@@ -202,12 +205,14 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
             CAMERA_PERM_REQUEST -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 takePhoto { cameraCallBack }
             } else {
-                // TODO: no permission message
+                Toast.makeText(this, getString(R.string.no_camera_permission), Toast.LENGTH_LONG)
+                    .show()
             }
             CALENDAR_PERM_REQUEST -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getMainCalendarId()
             } else {
-                // TODO: no permission message
+                Toast.makeText(this, getString(R.string.no_calendar_permission), Toast.LENGTH_LONG)
+                    .show()
             }
         }
     }
@@ -253,8 +258,8 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                 }
                 refreshNotesListCallBack?.invoke()
             } else {
-                // TODO: Google log in error message
-                Toast.makeText(this, "", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.google_sign_in_failed), Toast.LENGTH_LONG)
+                    .show()
             }
             setLeftButtonIcon(null)
             setLeftButtonAction(null)
