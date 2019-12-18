@@ -9,7 +9,6 @@
     <string name="note_title">Tytuł notatki:</string>
     <string name="protect_note">Zabezpiecz notatkę</string>
     <string name="sync_with_google">Synchronizuj z kalendarzem Google</string>
-    <string name="undo">Cofnij</string>
     <string name="voice_recognition_not_available">Rozpoznawanie mowy nie jest dostępne na tym urządzeniu!</string>
     <string name="your_notes">Twoje notatki</string>
     <string name="text_recognition_error">Błąd rozpoznawania tekstu!</string>
@@ -27,4 +26,8 @@
     <string name="google_sign_in_failed">Nie udało się zalogować na konto Google!</string>
     <string name="no_camera_permission">Nie przyznano zezwolenia na dostęp do aparatu!</string>
     <string name="no_calendar_permission">Nie przyznano zezwolenia na dostęp do kalendarza!</string>
+    <string name="removing_note">Proszę czekać, trwa usuwanie notatki…</string>
+    <string name="note_deleted_sync_failed">Usunięto notatkę, jednak synchronizacja z Google nie powiodła się…</string>
+    <string name="google_log_in_success">Zalogowano na konto Google.</string>
+    <string name="google_log_out">Wylogowano z konta Google.</string>
 </resources>

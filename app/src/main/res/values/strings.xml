@@ -5,7 +5,6 @@
     <string name="new_note">New note</string>
     <string name="note_deleted">Note deleted.</string>
     <string name="note_added">Note added.</string>
-    <string name="undo">Undo</string>
     <string name="note_title">Note title:</string>
     <string name="note_body">Note body:</string>
     <string name="sync_with_google">Synchronize with Google calendar</string>
@@ -27,4 +26,8 @@
     <string name="google_sign_in_failed">Google sign in failed!</string>
     <string name="no_camera_permission">Camera access denied!</string>
     <string name="no_calendar_permission">Calendar access denied!</string>
+    <string name="removing_note">Please wait, removing note in progress…</string>
+    <string name="note_deleted_sync_failed">Note deleted, but synchronization with Google failed…</string>
+    <string name="google_log_in_success">Logged in to Google account.</string>
+    <string name="google_log_out">Logged out from Google account.</string>
 </resources>

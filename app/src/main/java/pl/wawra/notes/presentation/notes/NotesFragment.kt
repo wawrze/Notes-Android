@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_notes.*
 import pl.wawra.notes.R
 import pl.wawra.notes.base.BaseFragment
@@ -44,22 +43,37 @@ class NotesFragment : BaseFragment(), NotesActions {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecycler()
+        setupObservers()
+    }
+
+    private fun setupObservers() {
         viewModel.notesList.observe(
             viewLifecycleOwner,
             Observer {
                 notesAdapter.data = it
             }
         )
-    }
-
-    private fun makeSnackBar(noteToRestore: NoteWithCalendarEventId) {
-        view?.let {
-            Snackbar.make(
-                it,
-                getString(R.string.note_deleted),
-                Snackbar.LENGTH_LONG
-            ).setAction(R.string.undo) { viewModel.restoreNotes(noteToRestore) }.show()
-        }
+        viewModel.changeProgressBar.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it.first) {
+                    fragment_notes_progress_bar.visibility = View.VISIBLE
+                } else {
+                    fragment_notes_progress_bar.visibility = View.GONE
+                }
+                if (it.second == -1) {
+                    fragment_notes_progress_bar_text.text = ""
+                } else {
+                    fragment_notes_progress_bar_text.text = getString(it.second)
+                }
+            }
+        )
+        viewModel.toastMessage.observe(
+            viewLifecycleOwner,
+            Observer {
+                Toast.makeText(context, getString(it), Toast.LENGTH_LONG).show()
+            }
+        )
     }
 
     private fun prepareBiometric(noteId: Long) {
@@ -126,7 +140,6 @@ class NotesFragment : BaseFragment(), NotesActions {
 
     override fun onDeleteClicked(note: NoteWithCalendarEventId) {
         viewModel.deleteNote(note)
-        makeSnackBar(note)
     }
 
     private fun setupRecycler() {

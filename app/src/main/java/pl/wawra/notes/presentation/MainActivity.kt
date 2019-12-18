@@ -81,6 +81,11 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                             setLeftButtonIcon(null)
                             refreshNotesListCallBack?.invoke()
                             setLeftButtonAction(null)
+                            Toast.makeText(
+                                this,
+                                getString(R.string.google_log_out),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     } else {
                         activity_main_top_bar_left_button.setOnClickListener {
@@ -188,6 +193,8 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                             getString(R.string.google_sign_in_failed),
                             Toast.LENGTH_LONG
                         ).show()
+                        setLeftButtonAction(null)
+                        onBg { googleUserDao.delete() }
                     }
                 }
             }
@@ -257,9 +264,12 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                     getMainCalendarId()
                 }
                 refreshNotesListCallBack?.invoke()
+                Toast.makeText(this, getString(R.string.google_log_in_success), Toast.LENGTH_LONG)
+                    .show()
             } else {
                 Toast.makeText(this, getString(R.string.google_sign_in_failed), Toast.LENGTH_LONG)
                     .show()
+                onBg { googleUserDao.delete() }
             }
             setLeftButtonIcon(null)
             setLeftButtonAction(null)
