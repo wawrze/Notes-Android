@@ -167,15 +167,35 @@
         app:layout_constraintTop_toTopOf="@id/fragment_new_note_protect_check_box"
         tools:visibility="visible" />
 
-    <ProgressBar
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragment_new_note_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/fragment_new_note_body_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fragment_new_note_body_input"
-        tools:visibility="visible" />
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/fragment_new_note_progress_bar_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fragment_new_note_progress_bar_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/fragment_new_note_progress_bar_image"
+            app:layout_constraintStart_toStartOf="@id/fragment_new_note_progress_bar_image"
+            app:layout_constraintTop_toBottomOf="@id/fragment_new_note_progress_bar_image"
+            tools:text="Please wait..." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

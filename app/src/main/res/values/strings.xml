@@ -21,4 +21,7 @@
     <string name="biometric_failed">Biometric authorization failed!</string>
     <string name="cancel">Cancel</string>
     <string name="biometric_unavailable">Note is protected, but this device does not support biometry!</string>
+    <string name="sync_in_progress">Please wait, syncing with Google…</string>
+    <string name="note_added_sync_failed">Note added, but synchronization with Google failed…</string>
+    <string name="note_added_sync_success">Note added and synchronized with Google.</string>
 </resources>

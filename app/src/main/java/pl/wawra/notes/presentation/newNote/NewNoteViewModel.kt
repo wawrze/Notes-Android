@@ -14,6 +14,7 @@ import com.google.api.services.vision.v1.model.AnnotateImageRequest
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest
 import com.google.api.services.vision.v1.model.Feature
 import com.google.api.services.vision.v1.model.Image
+import pl.wawra.notes.R
 import pl.wawra.notes.calendar.CalendarClient
 import pl.wawra.notes.database.Db
 import pl.wawra.notes.database.entities.CalendarEvent
@@ -30,6 +31,9 @@ class NewNoteViewModel : ViewModel() {
     private val calendarEventDao = Db.calendarEventDao
 
     val isUserLoggedIn = MutableLiveData<Boolean>()
+    val changeProgressBar = MutableLiveData<Pair<Boolean, Int>>()
+    val toastMessage = MutableLiveData<Int>()
+    val goBack = MutableLiveData<Boolean>()
 
     fun addNote(
         title: String,
@@ -48,7 +52,8 @@ class NewNoteViewModel : ViewModel() {
                 )
             )
             if (toSync) {
-                // TODO: show progress bar
+                changeProgressBar.postValue(Pair(false, R.string.sync_in_progress))
+
                 val user = googleUserDao.getUser()
                 if (user?.mainCalendar != null) {
                     val newEvent = Event()
@@ -65,7 +70,7 @@ class NewNoteViewModel : ViewModel() {
                         ?.insert(user.mainCalendar, newEvent)
                         ?.execute()
 
-                    // TODO: hide progress bar
+                    changeProgressBar.postValue(Pair(false, -1))
 
                     if (confirmation?.id != null) {
                         calendarEventDao.insert(
@@ -75,14 +80,17 @@ class NewNoteViewModel : ViewModel() {
                                 googleUser = user.mainCalendar
                             }
                         )
-                        // TODO: success message
+                        toastMessage.postValue(R.string.note_added_sync_success)
                     } else {
-                        // TODO: error message
+                        toastMessage.postValue(R.string.note_added_sync_failed)
                     }
                 } else {
-                    // TODO: error message
+                    toastMessage.postValue(R.string.note_added_sync_failed)
                 }
+            } else {
+                toastMessage.postValue(R.string.note_added)
             }
+            goBack.postValue(true)
         }
     }
 

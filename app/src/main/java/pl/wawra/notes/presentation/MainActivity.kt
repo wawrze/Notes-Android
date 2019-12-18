@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                             FirebaseAuth.getInstance().signOut()
                             onBg { googleUserDao.delete() }
                             setLeftButtonIcon(null)
+                            // TODO: refresh adapter
                         }
                     } else {
                         activity_main_top_bar_left_button.setOnClickListener {
@@ -248,6 +249,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                     )
                     getMainCalendarId()
                 }
+                // TODO: refresh adapter
             } else {
                 // TODO: Google log in error message
                 Toast.makeText(this, "", Toast.LENGTH_LONG).show()

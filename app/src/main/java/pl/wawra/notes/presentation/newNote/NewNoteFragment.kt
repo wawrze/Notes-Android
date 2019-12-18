@@ -40,11 +40,37 @@ class NewNoteFragment : BaseFragment() {
         setTime(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE))
         setUpListeners()
         setUpBiometric()
+        setupObservers()
+        viewModel.isUserLoggedIn()
+    }
+
+    private fun setupObservers() {
         viewModel.isUserLoggedIn.observe(
             viewLifecycleOwner,
             Observer { setUpGoogleSync(it) }
         )
-        viewModel.isUserLoggedIn()
+        viewModel.changeProgressBar.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it.first) {
+                    fragment_new_note_progress_bar.visibility = View.VISIBLE
+                } else {
+                    fragment_new_note_progress_bar.visibility = View.GONE
+                }
+                if (it.second == -1) {
+                    fragment_new_note_progress_bar_text.text = ""
+                } else {
+                    fragment_new_note_progress_bar_text.text = getString(it.second)
+                }
+            }
+        )
+        viewModel.toastMessage.observe(
+            viewLifecycleOwner,
+            Observer {
+                Toast.makeText(context, getString(it), Toast.LENGTH_LONG).show()
+            }
+        )
+        viewModel.goBack.observe(viewLifecycleOwner, Observer { navigate?.navigateUp() })
     }
 
     private fun setUpBiometric() {
@@ -124,8 +150,6 @@ class NewNoteFragment : BaseFragment() {
         val isProtected = fragment_new_note_protect_check_box.isChecked
         val toSync = fragment_new_note_google_check_box.isChecked
         viewModel.addNote(noteTitle, noteBody, date, isProtected, toSync)
-        navigate?.navigateUp()
-        Toast.makeText(context, getString(R.string.note_added), Toast.LENGTH_LONG).show()
     }
 
     private fun setDate(year: Int, month: Int, day: Int) {
