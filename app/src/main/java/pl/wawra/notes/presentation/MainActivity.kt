@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -76,16 +77,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                 onUi {
                     if (user != null) {
                         activity_main_top_bar_left_button.setOnClickListener {
-                            FirebaseAuth.getInstance().signOut()
-                            onBg { googleUserDao.delete() }
-                            setLeftButtonIcon(null)
-                            refreshNotesListCallBack?.invoke()
-                            setLeftButtonAction(null)
-                            Toast.makeText(
-                                this,
-                                getString(R.string.google_log_out),
-                                Toast.LENGTH_LONG
-                            ).show()
+                            signOut()
                         }
                     } else {
                         activity_main_top_bar_left_button.setOnClickListener {
@@ -95,6 +87,20 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                 }
             }
         }
+    }
+
+    private fun signOut() {
+        FirebaseAuth.getInstance().signOut()
+        onBg { googleUserDao.delete() }
+        setLeftButtonIcon(null)
+        refreshNotesListCallBack?.invoke()
+        setLeftButtonAction(null)
+        CalendarClient.closeCalendar()
+        Toast.makeText(
+            this,
+            getString(R.string.google_log_out),
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     override fun setRightButtonAction(action: () -> Any) {
@@ -193,6 +199,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                             getString(R.string.google_sign_in_failed),
                             Toast.LENGTH_LONG
                         ).show()
+                        activity_main_progress_bar.visibility = View.GONE
                         setLeftButtonAction(null)
                         onBg { googleUserDao.delete() }
                     }
@@ -233,6 +240,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
     }
 
     private fun signIn() {
+        activity_main_progress_bar.visibility = View.VISIBLE
         val signInIntent: Intent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -271,6 +279,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                     .show()
                 onBg { googleUserDao.delete() }
             }
+            activity_main_progress_bar.visibility = View.GONE
             setLeftButtonIcon(null)
             setLeftButtonAction(null)
         }

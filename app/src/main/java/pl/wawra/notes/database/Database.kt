@@ -13,7 +13,7 @@ import pl.wawra.notes.database.entities.Note
 
 @Database(
     entities = [Note::class, GoogleUser::class, CalendarEvent::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class Db : RoomDatabase() {
@@ -41,7 +41,7 @@ abstract class Db : RoomDatabase() {
                     context.applicationContext,
                     Db::class.java,
                     "notes_database.db"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
             }
         }
 

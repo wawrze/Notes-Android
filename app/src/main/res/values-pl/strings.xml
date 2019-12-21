@@ -30,4 +30,5 @@
     <string name="note_deleted_sync_failed">Usunięto notatkę, jednak synchronizacja z Google nie powiodła się…</string>
     <string name="google_log_in_success">Zalogowano na konto Google.</string>
     <string name="google_log_out">Wylogowano z konta Google.</string>
+    <string name="logging_to_google">Proszę czekać, trwa logowanie na konto Google…</string>
 </resources>

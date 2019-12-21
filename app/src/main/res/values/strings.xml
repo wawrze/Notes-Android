@@ -30,4 +30,5 @@
     <string name="note_deleted_sync_failed">Note deleted, but synchronization with Google failed…</string>
     <string name="google_log_in_success">Logged in to Google account.</string>
     <string name="google_log_out">Logged out from Google account.</string>
+    <string name="logging_to_google">Please wait, logging to Google account in progress…</string>
 </resources>
