@@ -57,7 +57,7 @@ class NoteDetailsFragment : BaseFragment() {
             { navigate?.popBackStack() },
             { editNote() },
             R.drawable.ic_return,
-            R.drawable.ic_edit
+            -1 // TODO: change to R.drawable.ic_edit
         )
         viewModel.getNote(args.noteId)
     }
