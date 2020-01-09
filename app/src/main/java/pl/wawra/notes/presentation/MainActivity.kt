@@ -136,6 +136,7 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
 
     override fun setRightButtonIcon(res: Int) {
         if (res != -1) {
+            activity_main_top_bar_right_button.visibility = View.VISIBLE
             activity_main_top_bar_right_button.setImageResource(res)
         } else {
             activity_main_top_bar_right_button.visibility = View.GONE
