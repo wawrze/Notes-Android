@@ -76,12 +76,16 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                 val user = googleUserDao.getUser()
                 onUi {
                     if (user != null) {
-                        activity_main_top_bar_left_button.setOnClickListener {
-                            signOut()
+                        setLeftButtonAction {
+                            if (activity_main_top_bar_title.text == getString(R.string.your_notes)) {
+                                signOut()
+                            }
                         }
                     } else {
-                        activity_main_top_bar_left_button.setOnClickListener {
-                            signIn()
+                        setLeftButtonAction {
+                            if (activity_main_top_bar_title.text == getString(R.string.your_notes)) {
+                                signIn()
+                            }
                         }
                     }
                 }
@@ -92,9 +96,11 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
     private fun signOut() {
         FirebaseAuth.getInstance().signOut()
         onBg { googleUserDao.delete() }
-        setLeftButtonIcon(null)
+        if (activity_main_top_bar_title.text == getString(R.string.your_notes)) {
+            setLeftButtonIcon(null)
+            setLeftButtonAction(null)
+        }
         refreshNotesListCallBack?.invoke()
-        setLeftButtonAction(null)
         CalendarClient.closeCalendar()
         Toast.makeText(
             this,
@@ -114,9 +120,15 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
             onBg {
                 val user = googleUserDao.getUser()
                 onUi {
-                    activity_main_top_bar_left_button.setImageResource(
-                        if (user != null) R.drawable.ic_google_dark else R.drawable.ic_google_light
-                    )
+                    if (activity_main_top_bar_title.text == getString(R.string.your_notes)) {
+                        setLeftButtonIcon(
+                            if (user != null) {
+                                R.drawable.ic_google_dark
+                            } else {
+                                R.drawable.ic_google_light
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -204,7 +216,9 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                             Toast.LENGTH_LONG
                         ).show()
                         activity_main_progress_bar.visibility = View.GONE
-                        setLeftButtonAction(null)
+                        if (activity_main_top_bar_title.text == getString(R.string.your_notes)) {
+                            setLeftButtonAction(null)
+                        }
                         onBg { googleUserDao.delete() }
                     }
                 }
@@ -284,8 +298,10 @@ class MainActivity : AppCompatActivity(), ToolbarInteraction, Navigation {
                 onBg { googleUserDao.delete() }
             }
             activity_main_progress_bar.visibility = View.GONE
-            setLeftButtonIcon(null)
-            setLeftButtonAction(null)
+            if (activity_main_top_bar_title.text == getString(R.string.your_notes)) {
+                setLeftButtonIcon(null)
+                setLeftButtonAction(null)
+            }
         }
     }
 

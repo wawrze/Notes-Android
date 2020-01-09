@@ -3,6 +3,7 @@
 
     <string name="your_notes">Your notes</string>
     <string name="new_note">New note</string>
+    <string name="note_details">Note details</string>
     <string name="note_deleted">Note deleted.</string>
     <string name="note_added">Note added.</string>
     <string name="note_title">Note title:</string>

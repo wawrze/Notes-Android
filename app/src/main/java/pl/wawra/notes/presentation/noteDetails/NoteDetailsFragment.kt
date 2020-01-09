@@ -53,7 +53,7 @@ class NoteDetailsFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         setUpTopBar(
-            getString(R.string.new_note),
+            getString(R.string.note_details),
             { navigate?.popBackStack() },
             { editNote() },
             R.drawable.ic_return,

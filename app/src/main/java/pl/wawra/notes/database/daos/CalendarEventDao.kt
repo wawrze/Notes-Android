@@ -9,9 +9,6 @@ import pl.wawra.notes.database.entities.CalendarEvent
 @Dao
 interface CalendarEventDao {
 
-    @Query("SELECT id FROM calendarevent WHERE noteId = :noteId AND googleUser = :googleUser LIMIT 1")
-    fun getEventId(noteId: Long, googleUser: String): String?
-
     @Query("DELETE FROM calendarevent WHERE id = :id")
     fun delete(id: String)
 

@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Notes</string>
     <string name="new_note">Nowa notatka</string>
+    <string name="note_details">Szczegóły notatki</string>
     <string name="note_added">Dodano notatkę.</string>
     <string name="note_body">Treść notatki:</string>
     <string name="note_date_and_time">Data i godzina:</string>

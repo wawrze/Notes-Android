@@ -12,6 +12,7 @@ import pl.wawra.notes.utils.onBg
 class NotesViewModel : ViewModel() {
 
     private var noteDao = Db.noteDao
+    private var calendarEventDao = Db.calendarEventDao
     private val googleUserDao = Db.googleUserDao
 
     val notesList: MutableLiveData<List<NoteWithCalendarEventId>> = MutableLiveData()
@@ -45,6 +46,8 @@ class NotesViewModel : ViewModel() {
                             ?.execute()
                     } catch (e: GoogleJsonResponseException) {
                         toastMessage.postValue(R.string.note_deleted_sync_failed)
+                    } finally {
+                        calendarEventDao.delete(noteToDelete.calendarEventId.orEmpty())
                     }
                 }
                 changeProgressBar.postValue(Pair(false, -1))
